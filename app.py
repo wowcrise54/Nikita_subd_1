@@ -1,8 +1,9 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request
 from config import Config
 from models import db, Department, Employee, Position, Project, EmployeeProject
 from forms import DepartmentForm, EmployeeForm
 from flask_migrate import Migrate
+import requests
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -61,7 +62,23 @@ def employee_detail(employee_id):
     # Отправляем данные в шаблон
     return render_template('employee_detail.html', employee=employee, department=department, position=position, projects=projects)
 
+@app.route('/department/<int:department_id>/assign_manager', methods=['GET', 'POST'])
+def assign_manager(department_id):
+    department = Department.query.get_or_404(department_id)
+    employees = Employee.query.all()  # Получаем список всех сотрудников
+    
+    if request.method == 'POST':
+        manager_id = request.form.get('manager_id')
+        department.manager_id = manager_id  # Назначаем нового начальника отдела
+        db.session.commit()  # Сохраняем изменения в базе данных
+        return redirect(url_for('department_detail', department_id=department_id))
+    
+    return render_template('assign_manager.html', department=department, employees=employees)
 
+@app.route('/department/<int:department_id>')
+def department_detail(department_id):
+    department = Department.query.get_or_404(department_id)
+    return render_template('department_details.html', department=department)
 
 if __name__ == '__main__':
     app.run(debug=True)

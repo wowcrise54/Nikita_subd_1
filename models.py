@@ -7,6 +7,7 @@ class Department(db.Model):
     department_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False, unique=True)
     manager_id = db.Column(db.Integer, db.ForeignKey('employees.employee_id'), unique=True)
+    manager = db.relationship('Employee', backref='managed_department', foreign_keys=[manager_id])
 
 class Position(db.Model):
     __tablename__ = 'positions'

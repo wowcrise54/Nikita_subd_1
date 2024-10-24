@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Назначить начальника отдела{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Назначить начальника отдела для {{ department.name }}</h1>
+    
+    <form method="POST">
+        <div>
+            <label for="manager_id">Выберите сотрудника для назначения начальником:</label>
+            <select name="manager_id" id="manager_id">
+                {% for employee in employees %}
+                <option value="{{ employee.employee_id }}" {% if employee.employee_id == department.manager_id %}selected{% endif %}>
+                    {{ employee.first_name }} {{ employee.last_name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn">Назначить</button>
+    </form>
+    
+    <a href="{{ url_for('department_detail', department_id=department.department_id) }}" class="btn">Вернуться к отделу</a>
+</div>
+{% endblock %}
