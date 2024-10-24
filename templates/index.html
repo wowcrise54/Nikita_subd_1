@@ -1,19 +1,39 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Список департаментов и сотрудников</h1>
+<div class="container">
+    <h1>Список департаментов и сотрудников</h1>
 
-<h2>Департаменты</h2>
-<ul>
-    {% for department in departments %}
-    <li>{{ department.name }} (Менеджер: {{ department.manager_id }})</li>
-    {% endfor %}
-</ul>
+    <div class="stats">
+        <div class="stat-card">
+            <h3>Всего департаментов</h3>
+            <p>{{ departments|length }}</p>
+        </div>
+        <div class="stat-card">
+            <h3>Всего сотрудников</h3>
+            <p>{{ employees|length }}</p>
+        </div>
+    </div>
 
-<h2>Сотрудники</h2>
-<ul>
-    {% for employee in employees %}
-    <li>{{ employee.first_name }} {{ employee.last_name }} (Email: {{ employee.email }})</li>
-    {% endfor %}
-</ul>
+    <h2>Департаменты</h2>
+    <div class="card-container">
+        {% for department in departments %}
+        <div class="card">
+            <h3>{{ department.name }}</h3>
+            <p>Менеджер: {% if department.manager %} {{ department.manager.first_name }} {{ department.manager.last_name }} {% else %}Не назначен{% endif %}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <h2>Сотрудники</h2>
+    <div class="card-container">
+        {% for employee in employees %}
+        <div class="card">
+            <h3>{{ employee.first_name }} {{ employee.last_name }}</h3>
+            <p>Email: {{ employee.email }}</p>
+            <p>Департамент: {{ employee.department.name if employee.department else 'Не назначен' }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

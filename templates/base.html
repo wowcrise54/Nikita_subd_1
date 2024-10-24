@@ -1,37 +1,19 @@
-{% extends 'base.html' %}
-
-{% block content %}
-<h1 class="page-title">Список департаментов и сотрудников</h1>
-
-<div class="stats">
-    <div class="stat-card">
-        <h3>Всего департаментов</h3>
-        <p>{{ departments|length }}</p>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Управление персоналом</title>
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('index') }}">Главная</a>
+        <a href="{{ url_for('new_department') }}">Добавить департамент</a>
+        <a href="{{ url_for('new_employee') }}">Добавить сотрудника</a>
+    </nav>
+    <div class="container">
+        {% block content %}{% endblock %}
     </div>
-    <div class="stat-card">
-        <h3>Всего сотрудников</h3>
-        <p>{{ employees|length }}</p>
-    </div>
-</div>
-
-<h2>Департаменты</h2>
-<div class="card-container">
-    {% for department in departments %}
-    <div class="card">
-        <h3>{{ department.name }}</h3>
-        <p>Менеджер: {{ department.manager_id if department.manager_id else 'Не назначен' }}</p>
-    </div>
-    {% endfor %}
-</div>
-
-<h2>Сотрудники</h2>
-<div class="card-container">
-    {% for employee in employees %}
-    <div class="card">
-        <h3>{{ employee.first_name }} {{ employee.last_name }}</h3>
-        <p>Email: {{ employee.email }}</p>
-        <p>Департамент: {{ employee.department_id }}</p>
-    </div>
-    {% endfor %}
-</div>
-{% endblock %}
+</body>
+</html>
