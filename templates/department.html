@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Добавить новый департамент</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.name.label }}<br>
+        {{ form.name(size=32) }}<br>
+    </p>
+    <p>
+        {{ form.manager_id.label }}<br>
+        {{ form.manager_id() }}<br>
+    </p>
+    <p>{{ form.submit() }}</p>
+</form>
+{% endblock %}

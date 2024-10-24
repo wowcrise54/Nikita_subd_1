@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Добавить нового сотрудника</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.first_name.label }}<br>
+        {{ form.first_name(size=32) }}<br>
+    </p>
+    <p>
+        {{ form.last_name.label }}<br>
+        {{ form.last_name(size=32) }}<br>
+    </p>
+    <p>
+        {{ form.middle_name.label }}<br>
+        {{ form.middle_name(size=32) }}<br>
+    </p>
+    <p>
+        {{ form.date_of_birth.label }}<br>
+        {{ form.date_of_birth() }}<br>
+    </p>
+    <p>
+        {{ form.email.label }}<br>
+        {{ form.email(size=32) }}<br>
+    </p>
+    <p>
+        {{ form.phone.label }}<br>
+        {{ form.phone(size=32) }}<br>
+    </p>
+    <p>
+        {{ form.hire_date.label }}<br>
+        {{ form.hire_date() }}<br>
+    </p>
+    <p>
+        {{ form.department_id.label }}<br>
+        {{ form.department_id() }}<br>
+    </p>
+    <p>
+        {{ form.position_id.label }}<br>
+        {{ form.position_id() }}<br>
+    </p>
+    <p>{{ form.submit() }}</p>
+</form>
+{% endblock %}

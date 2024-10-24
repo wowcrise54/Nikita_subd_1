@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="page-title">Список департаментов и сотрудников</h1>
+
+<div class="stats">
+    <div class="stat-card">
+        <h3>Всего департаментов</h3>
+        <p>{{ departments|length }}</p>
+    </div>
+    <div class="stat-card">
+        <h3>Всего сотрудников</h3>
+        <p>{{ employees|length }}</p>
+    </div>
+</div>
+
+<h2>Департаменты</h2>
+<div class="card-container">
+    {% for department in departments %}
+    <div class="card">
+        <h3>{{ department.name }}</h3>
+        <p>Менеджер: {{ department.manager_id if department.manager_id else 'Не назначен' }}</p>
+    </div>
+    {% endfor %}
+</div>
+
+<h2>Сотрудники</h2>
+<div class="card-container">
+    {% for employee in employees %}
+    <div class="card">
+        <h3>{{ employee.first_name }} {{ employee.last_name }}</h3>
+        <p>Email: {{ employee.email }}</p>
+        <p>Департамент: {{ employee.department_id }}</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
