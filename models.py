@@ -42,3 +42,5 @@ class EmployeeProject(db.Model):
     employee_id = db.Column(db.Integer, db.ForeignKey('employees.employee_id'), primary_key=True)
     project_id = db.Column(db.Integer, db.ForeignKey('projects.project_id'), primary_key=True)
     role = db.Column(db.String(100))
+
+

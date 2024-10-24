@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, url_for
 from config import Config
-from models import db, Department, Employee, Position
+from models import db, Department, Employee, Position, Project, EmployeeProject
 from forms import DepartmentForm, EmployeeForm
 from flask_migrate import Migrate
 
@@ -47,6 +47,21 @@ def new_employee():
         db.session.commit()
         return redirect(url_for('index'))
     return render_template('employee.html', form=form)
+
+@app.route('/employee/<int:employee_id>')
+def employee_detail(employee_id):
+    # Запрос для получения информации о сотруднике, его департаменте и должности
+    employee = db.session.query(Employee).filter_by(employee_id=employee_id).first()
+    department = db.session.query(Department).filter_by(department_id=employee.department_id).first()
+    position = db.session.query(Position).filter_by(position_id=employee.position_id).first()
+
+    # Запрос для получения всех проектов, в которых задействован сотрудник
+    projects = db.session.query(Project, EmployeeProject).join(EmployeeProject).filter(EmployeeProject.employee_id == employee_id).all()
+
+    # Отправляем данные в шаблон
+    return render_template('employee_detail.html', employee=employee, department=department, position=position, projects=projects)
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Детальная информация о сотруднике{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Детальная информация о сотруднике</h1>
+    
+    <h2>{{ employee.first_name }} {{ employee.last_name }}</h2>
+    <p><strong>Отчество:</strong> {{ employee.middle_name }}</p>
+    <p><strong>Дата рождения:</strong> {{ employee.date_of_birth }}</p>
+    <p><strong>Email:</strong> {{ employee.email }}</p>
+    <p><strong>Телефон:</strong> {{ employee.phone }}</p>
+    <p><strong>Дата найма:</strong> {{ employee.hire_date }}</p>
+
+    <h3>Департамент</h3>
+    <p>{{ department.name if department else 'Не назначен' }}</p>
+
+    <h3>Должность</h3>
+    <p>{{ position.title if position else 'Не назначена' }}</p>
+    <p><strong>Зарплата:</strong> {{ position.salary if position else 'Не указана' }}</p>
+
+    <h3>Проекты</h3>
+    {% if projects %}
+        <ul>
+        {% for project, employee_project in projects %}
+            <li>{{ project.name }} — {{ employee_project.role }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Сотрудник не участвует в проектах.</p>
+    {% endif %}
+    
+    <a href="{{ url_for('index') }}" class="btn">Вернуться на главную</a>
+</div>
+{% endblock %}
