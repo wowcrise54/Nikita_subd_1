@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, flash
 from config import Config
 from models import db, Department, Employee, Position, Project, EmployeeProject
 from forms import DepartmentForm, EmployeeForm
@@ -62,23 +62,61 @@ def employee_detail(employee_id):
     # Отправляем данные в шаблон
     return render_template('employee_detail.html', employee=employee, department=department, position=position, projects=projects)
 
+@app.route('/department/<int:department_id>')
+def department_detail(department_id):
+    department = Department.query.get_or_404(department_id)
+    return render_template('department_details.html', department=department)
+
+@app.route('/department/<int:department_id>/remove_manager', methods=['POST'])
+def remove_manager(department_id):
+    department = Department.query.get_or_404(department_id)
+    
+    if department.manager_id:
+        department.manager_id = None
+        db.session.commit()
+        flash('Начальник отдела был снят с должности.')
+    else:
+        flash('В этом отделе нет назначенного начальника.')
+    
+    return redirect(url_for('department_details', department_id=department_id))
+
+@app.route('/employee/<int:employee_id>/transfer', methods=['GET', 'POST'])
+def transfer_employee(employee_id):
+    employee = Employee.query.get_or_404(employee_id)
+    departments = Department.query.all()
+    
+    # Если сотрудник является начальником отдела, запрещаем ему перевод
+    if employee.managed_department:
+        flash('Нельзя перевести сотрудника, так как он является начальником отдела.')
+        return redirect(url_for('employee_detail', employee_id=employee_id))
+    
+    if request.method == 'POST':
+        new_department_id = request.form.get('new_department_id')
+        employee.department_id = new_department_id
+        db.session.commit()
+        flash('Сотрудник успешно переведен.')
+        return redirect(url_for('employee_detail', employee_id=employee_id))
+    
+    return render_template('transfer_employee.html', employee=employee, departments=departments)
+
 @app.route('/department/<int:department_id>/assign_manager', methods=['GET', 'POST'])
 def assign_manager(department_id):
     department = Department.query.get_or_404(department_id)
-    employees = Employee.query.all()  # Получаем список всех сотрудников
+    employees = Employee.query.filter(Employee.managed_department == None).all()  # Только сотрудники, которые не являются начальниками других отделов
     
     if request.method == 'POST':
         manager_id = request.form.get('manager_id')
         department.manager_id = manager_id  # Назначаем нового начальника отдела
         db.session.commit()  # Сохраняем изменения в базе данных
-        return redirect(url_for('department_detail', department_id=department_id))
+        return redirect(url_for('department_details', department_id=department_id))
     
     return render_template('assign_manager.html', department=department, employees=employees)
 
-@app.route('/department/<int:department_id>')
-def department_detail(department_id):
+@app.route('/department/<int:department_id>/employees')
+def department_employees(department_id):
     department = Department.query.get_or_404(department_id)
-    return render_template('department_details.html', department=department)
+    employees = Employee.query.filter_by(department_id=department_id).all()  # Получаем всех сотрудников департамента
+    return render_template('department_employees.html', department=department, employees=employees)
 
 if __name__ == '__main__':
     app.run(debug=True)

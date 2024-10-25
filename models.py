@@ -29,6 +29,7 @@ class Employee(db.Model):
     hire_date = db.Column(db.Date, nullable=False)
     department_id = db.Column(db.Integer, db.ForeignKey('departments.department_id'), nullable=False)
     position_id = db.Column(db.Integer, db.ForeignKey('positions.position_id'), nullable=False)
+    position = db.relationship('Position', backref='employees')
 
 class Project(db.Model):
     __tablename__ = 'projects'

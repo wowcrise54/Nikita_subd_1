@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Перевод сотрудника {{ employee.first_name }} {{ employee.last_name }} в другой отдел</h1>
+    
+    <form method="POST">
+        <div>
+            <label for="new_department_id">Выберите новый отдел:</label>
+            <select name="new_department_id" id="new_department_id">
+                {% for department in departments %}
+                <option value="{{ department.department_id }}" {% if department.department_id == employee.department_id %}selected{% endif %}>
+                    {{ department.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn">Перевести</button>
+    </form>
+    
+    <a href="{{ url_for('employee_detail', employee_id=employee.employee_id) }}" class="btn">Вернуться к сотруднику</a>
+</div>
+{% endblock %}
