@@ -6,27 +6,24 @@
 <div class="container">
     <h1>Отдел: {{ department.name }}</h1>
     
-    <h2>Начальник отдела</h2>
-    <p>
-        {% if department.manager %}
-            {{ department.manager.first_name }} {{ department.manager.last_name }}
-            <form method="POST" action="{{ url_for('remove_manager', department_id=department.department_id) }}">
-                <button type="submit" class="btn btn-danger">Снять с должности</button>
-            </form>
-        {% else %}
-            <em>Начальник не назначен</em>
-        {% endif %}
-    </p>
-
-    <a href="{{ url_for('assign_manager', department_id=department.department_id) }}" class="btn">Назначить начальника отдела</a>
-    <a href="{{ url_for('index') }}" class="btn">Вернуться на главную</a>
-
+    <div class="card">
+        <h2>Начальник отдела</h2>
+        <p>
+            {% if department.manager %}
+                {{ department.manager.first_name }} {{ department.manager.last_name }}
+                <form method="POST" action="{{ url_for('remove_manager', department_id=department.department_id) }}">
+                    <button type="submit" class="btn btn-danger">Снять с должности</button>
+                </form>
+            {% else %}
+                <em>Начальник не назначен</em>
+            {% endif %}
+        </p>
+        <a href="{{ url_for('assign_manager', department_id=department.department_id) }}" class="btn">Назначить начальника отдела</a>
+    </div>
+    
     <h3>Сотрудники отдела</h3>
     <a href="{{ url_for('department_employees', department_id=department.department_id) }}" class="btn">Просмотреть всех сотрудников</a>
     
     <a href="{{ url_for('index') }}" class="btn">Вернуться на главную</a>
 </div>
-
-
-
 {% endblock %}

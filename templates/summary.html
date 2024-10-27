@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Обобщённая информация</h2>
+
+<div class="summary-item">
+    <h3>Общее количество сотрудников:</h3>
+    <p>{{ total_employees }}</p>
+</div>
+
+<div class="summary-item">
+    <h3>Средняя зарплата сотрудников:</h3>
+    <p>{{ average_salary|round(2) }} руб.</p>
+</div>
+
+<div class="summary-item">
+    <h3>Количество проектов:</h3>
+    <p>{{ total_projects }}</p>
+</div>
+
+<a href="{{ url_for('index') }}" class="btn">Вернуться на главную</a>
+{% endblock %}
