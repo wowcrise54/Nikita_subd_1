@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Список сотрудников</h1>
+
+<!-- Форма поиска -->
+<form method="GET" action="{{ url_for('employees') }}">
+    <input type="text" name="search" placeholder="Поиск сотрудника..." value="{{ search_query }}">
+
+    <select name="department_id">
+        <option value="">Все департаменты</option>
+        {% for department in departments %}
+        <option value="{{ department.department_id }}" {% if department_id == department.department_id %}selected{% endif %}>
+            {{ department.name }}
+        </option>
+        {% endfor %}
+    </select>
+    <button type="submit" class="btn">Искать</button>
+</form>
+
+
+
+<!-- Ссылки для сортировки -->
+<div class="sort-options">
+    <a href="{{ url_for('employees', search=search_query, sort_by='first_name', order='asc') }}">Имя ↑</a>
+    <a href="{{ url_for('employees', search=search_query, sort_by='first_name', order='desc') }}">Имя ↓</a>
+    <a href="{{ url_for('employees', search=search_query, sort_by='last_name', order='asc') }}">Фамилия ↑</a>
+    <a href="{{ url_for('employees', search=search_query, sort_by='last_name', order='desc') }}">Фамилия ↓</a>
+    <a href="{{ url_for('employees', search=search_query, sort_by='email', order='asc') }}">Email ↑</a>
+    <a href="{{ url_for('employees', search=search_query, sort_by='email', order='desc') }}">Email ↓</a>
+</div>
+
+<!-- Вывод списка сотрудников -->
+<ul>
+    {% for employee in employees %}
+    <li>{{ employee.first_name }} {{ employee.last_name }} — {{ employee.email }}</li>
+    {% else %}
+    <li>Сотрудники не найдены.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

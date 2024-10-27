@@ -248,6 +248,35 @@ def summary():
     # Передача данных в шаблон
     return render_template('summary.html', total_employees=total_employees, average_salary=average_salary, total_projects=total_projects)
 
+@app.route('/employees', methods=['GET', 'POST'])
+def employees():
+    search_query = request.args.get('search', '')  # Получение поискового запроса
+    sort_by = request.args.get('sort_by', 'last_name')  # Сортировка по умолчанию по фамилии
+    order = request.args.get('order', 'asc')  # Порядок сортировки (по умолчанию по возрастанию)
+    department_id = request.args.get('department_id', None)  # Получаем выбранный департамент
+
+    # Фильтрация и поиск
+    employees = Employee.query.filter(
+        (Employee.first_name.ilike(f'%{search_query}%')) |
+        (Employee.last_name.ilike(f'%{search_query}%')) |
+        (Employee.email.ilike(f'%{search_query}%'))
+    )
+
+    if department_id:  # Фильтрация по департаменту
+        employees = employees.filter(Employee.department_id == department_id)
+    # Сортировка
+    if sort_by == 'first_name':
+        employees = employees.order_by(Employee.first_name.asc() if order == 'asc' else Employee.first_name.desc())
+    elif sort_by == 'last_name':
+        employees = employees.order_by(Employee.last_name.asc() if order == 'asc' else Employee.last_name.desc())
+    elif sort_by == 'email':
+        employees = employees.order_by(Employee.email.asc() if order == 'asc' else Employee.email.desc())
+
+    # Получение результата
+    employees = employees.all()
+    departments = Department.query.all()
+
+    return render_template('employees.html', employees=employees, search_query=search_query, sort_by=sort_by, order=order, departments=departments, department_id=department_id)
 
 
 if __name__ == '__main__':
