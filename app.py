@@ -10,7 +10,7 @@ from sqlalchemy import func
 
 # Configuration
 class Config:
-    SQLALCHEMY_DATABASE_URI = "postgresql://postgres:Tusson112@localhost/employee_otdel"
+    SQLALCHEMY_DATABASE_URI = "postgresql://postgres:пароль@localhost/Название БД"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = "default_secret_key"
 
